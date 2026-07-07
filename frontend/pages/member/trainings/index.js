@@ -6,6 +6,9 @@ import api from '../../../lib/api';
 const CATEGORIES = ['All', 'Technical', 'Management', 'Design', 'Marketing', 'Finance', 'Soft Skills', 'Other'];
 const LEVELS = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
+const CAT_LABELS = { All: 'Toutes', Technical: 'Technique', Management: 'Management', Design: 'Design', Marketing: 'Marketing', Finance: 'Finance', 'Soft Skills': 'Soft Skills', Other: 'Autre' };
+const LVL_LABELS = { All: 'Tous', Beginner: 'Débutant', Intermediate: 'Intermédiaire', Advanced: 'Avancé' };
+
 export default function MemberTrainings() {
   const [trainings, setTrainings] = useState([]);
   const [progressMap, setProgressMap] = useState({});
@@ -40,19 +43,19 @@ export default function MemberTrainings() {
   return (
     <DashboardLayout requiredRole="member">
       <div className="mb-6">
-        <h2 className="font-display font-bold text-2xl text-navy-900">Available Trainings</h2>
-        <p className="text-slate-500 text-sm mt-0.5">{trainings.length} courses available</p>
+        <h2 className="font-display font-bold text-2xl text-navy-900">Formations disponibles</h2>
+        <p className="text-slate-500 text-sm mt-0.5">{trainings.length} cours disponibles</p>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-6">
-        <input className="input max-w-xs" placeholder="Search trainings…"
+        <input className="input max-w-xs" placeholder="Rechercher des formations…"
           value={search} onChange={(e) => setSearch(e.target.value)} />
         <select className="input w-auto" value={category} onChange={(e) => setCategory(e.target.value)}>
-          {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+          {CATEGORIES.map((c) => <option key={c} value={c}>{CAT_LABELS[c] || c}</option>)}
         </select>
         <select className="input w-auto" value={level} onChange={(e) => setLevel(e.target.value)}>
-          {LEVELS.map((l) => <option key={l}>{l}</option>)}
+          {LEVELS.map((l) => <option key={l} value={l}>{LVL_LABELS[l] || l}</option>)}
         </select>
       </div>
 
@@ -72,8 +75,8 @@ export default function MemberTrainings() {
           ))}
           {filtered.length === 0 && (
             <div className="col-span-3 card text-center py-16 text-slate-400">
-              <span className="text-4xl block mb-3">🔍</span>
-              No trainings match your filters.
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-3 text-slate-300"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Aucune formation ne correspond à vos critères.
             </div>
           )}
         </div>

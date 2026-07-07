@@ -5,6 +5,7 @@ import DashboardLayout from '../../../components/layout/DashboardLayout';
 import api from '../../../lib/api';
 
 const LEVEL_COLOR = { Beginner: 'badge-green', Intermediate: 'badge-yellow', Advanced: 'badge-red' };
+const STATUS_LABELS = { in_progress: 'En cours', completed: 'Terminé', enrolled: 'Inscrit' };
 
 export default function TrainingDetail() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function TrainingDetail() {
       setTraining(data.training);
       setProgress(data.userProgress);
     } catch {
-      setError('Failed to load training.');
+      setError('Échec du chargement de la formation.');
     } finally {
       setLoading(false);
     }
@@ -39,7 +40,7 @@ export default function TrainingDetail() {
       await api.post(`/progress/enroll/${id}`);
       fetchData();
     } catch (err) {
-      setError(err.response?.data?.message || 'Enrollment failed.');
+      setError(err.response?.data?.message || 'Échec de l\'inscription.');
     } finally {
       setEnrolling(false);
     }
@@ -52,7 +53,7 @@ export default function TrainingDetail() {
       const { data } = await api.put(`/progress/${id}/module/${moduleIndex}`);
       setProgress(data.progress);
     } catch (err) {
-      setError(err.response?.data?.message || 'Update failed.');
+      setError(err.response?.data?.message || 'Échec de la mise à jour.');
     } finally {
       setUpdatingModule(null);
     }
@@ -72,9 +73,9 @@ export default function TrainingDetail() {
   if (error || !training) return (
     <DashboardLayout requiredRole="member">
       <div className="card text-center py-16 text-slate-400">
-        <span className="text-4xl block mb-3">⚠️</span>
-        <p>{error || 'Training not found.'}</p>
-        <Link href="/member/trainings" className="btn-outline mt-4 inline-block">← Back to Trainings</Link>
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-3 text-amber-500"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <p>{error || 'Formation introuvable.'}</p>
+        <Link href="/member/trainings" className="btn-outline mt-4 inline-block">← Retour aux formations</Link>
       </div>
     </DashboardLayout>
   );
@@ -85,7 +86,7 @@ export default function TrainingDetail() {
     <DashboardLayout requiredRole="member">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-slate-400 mb-6">
-        <Link href="/member/trainings" className="hover:text-navy-900 transition-colors">Trainings</Link>
+        <Link href="/member/trainings" className="hover:text-navy-900 transition-colors">Formations</Link>
         <span>/</span>
         <span className="text-navy-900 font-medium truncate">{training.title}</span>
       </div>
@@ -110,22 +111,22 @@ export default function TrainingDetail() {
 
             <div className="flex flex-wrap gap-6 mt-5 pt-5 border-t border-slate-100">
               <div className="flex items-center gap-2 text-sm text-slate-500">
-                <span>⏱</span>
-                <span><strong className="text-navy-900">{training.duration}h</strong> total</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span><strong className="text-navy-900">{training.duration}h</strong> au total</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-slate-500">
-                <span>📦</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
                 <span><strong className="text-navy-900">{training.modules?.length || 0}</strong> modules</span>
               </div>
               {training.instructor && (
                 <div className="flex items-center gap-2 text-sm text-slate-500">
-                  <span>👤</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                   <span><strong className="text-navy-900">{training.instructor}</strong></span>
                 </div>
               )}
               <div className="flex items-center gap-2 text-sm text-slate-500">
-                <span>👥</span>
-                <span><strong className="text-navy-900">{training.enrolledCount}</strong> enrolled</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span><strong className="text-navy-900">{training.enrolledCount}</strong> inscrits</span>
               </div>
             </div>
           </div>
@@ -133,7 +134,7 @@ export default function TrainingDetail() {
           {/* Modules */}
           {training.modules?.length > 0 && (
             <div className="card">
-              <h2 className="font-display font-bold text-navy-900 text-lg mb-4">Course Modules</h2>
+              <h2 className="font-display font-bold text-navy-900 text-lg mb-4">Modules du cours</h2>
               <div className="space-y-3">
                 {training.modules.sort((a, b) => a.order - b.order).map((mod, idx) => {
                   const done = isModuleDone(idx);
@@ -177,10 +178,10 @@ export default function TrainingDetail() {
                               : 'bg-navy-900 text-white hover:bg-navy-700'
                           }`}
                         >
-                          {isUpdating ? '…' : done ? 'Undo' : 'Mark Done'}
+                          {isUpdating ? '…' : done ? 'Annuler' : 'Marquer terminé'}
                         </button>
                       ) : (
-                        <span className="text-xs text-slate-400">Enroll to track</span>
+                        <span className="text-xs text-slate-400">Inscrivez-vous pour suivre</span>
                       )}
                     </div>
                   );
@@ -197,13 +198,13 @@ export default function TrainingDetail() {
             {progress ? (
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-display font-bold text-navy-900">Your Progress</h3>
+                  <h3 className="font-display font-bold text-navy-900">Votre progression</h3>
                   <span className={`badge ${
                     progress.status === 'completed' ? 'badge-green'
                     : progress.status === 'in_progress' ? 'badge-teal'
                     : 'badge-yellow'
                   }`}>
-                    {progress.status.replace('_', ' ')}
+                    {STATUS_LABELS[progress.status] || progress.status}
                   </span>
                 </div>
 
@@ -225,32 +226,32 @@ export default function TrainingDetail() {
                     </div>
                   </div>
                   <p className="text-sm text-slate-500 mt-3">
-                    {progress.completedModules?.length || 0} of {training.modules?.length || 0} modules done
+                    {progress.completedModules?.length || 0} sur {training.modules?.length || 0} modules terminés
                   </p>
                 </div>
 
                 {progress.status === 'completed' && (
                   <div className="text-center p-3 rounded-xl bg-green-50 border border-green-100">
-                    <span className="text-2xl block mb-1">🎉</span>
-                    <p className="text-green-700 text-sm font-semibold">Training completed!</p>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-1 text-green-600"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                    <p className="text-green-700 text-sm font-semibold">Formation terminée !</p>
                     <p className="text-green-600 text-xs mt-0.5">
-                      {new Date(progress.completedAt).toLocaleDateString()}
+                      {new Date(progress.completedAt).toLocaleDateString('fr-FR')}
                     </p>
                   </div>
                 )}
 
                 <div className="mt-4 text-xs text-slate-400 text-center">
-                  Enrolled {new Date(progress.enrolledAt).toLocaleDateString()}
+                  Inscrit le {new Date(progress.enrolledAt).toLocaleDateString('fr-FR')}
                 </div>
               </div>
             ) : (
               <div className="text-center">
                 <div className="w-16 h-16 rounded-2xl bg-navy-900 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl">📚</span>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                 </div>
-                <h3 className="font-display font-bold text-navy-900 text-lg mb-2">Start Learning</h3>
+                <h3 className="font-display font-bold text-navy-900 text-lg mb-2">Commencez à apprendre</h3>
                 <p className="text-slate-500 text-sm mb-5">
-                  Enroll to track your progress and complete modules.
+                  Inscrivez-vous pour suivre votre progression et terminer les modules.
                 </p>
                 <button
                   onClick={handleEnroll}
@@ -260,9 +261,9 @@ export default function TrainingDetail() {
                   {enrolling ? (
                     <span className="flex items-center justify-center gap-2">
                       <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Enrolling…
+                      Inscription…
                     </span>
-                  ) : 'Enroll Now'}
+                  ) : 'S\'inscrire maintenant'}
                 </button>
               </div>
             )}
@@ -270,14 +271,14 @@ export default function TrainingDetail() {
 
           {/* Training info card */}
           <div className="card space-y-3">
-            <h3 className="font-display font-semibold text-navy-900 text-sm">Training Info</h3>
+            <h3 className="font-display font-semibold text-navy-900 text-sm">Informations sur la formation</h3>
             {[
-              { label: 'Category', value: training.category },
-              { label: 'Level', value: training.level },
-              { label: 'Duration', value: `${training.duration} hours` },
+              { label: 'Catégorie', value: training.category },
+              { label: 'Niveau', value: training.level },
+              { label: 'Durée', value: `${training.duration} heures` },
               { label: 'Modules', value: training.modules?.length || 0 },
-              { label: 'Students', value: training.enrolledCount },
-              { label: 'Completions', value: training.completedCount },
+              { label: 'Étudiants', value: training.enrolledCount },
+              { label: 'Validations', value: training.completedCount },
             ].map(({ label, value }) => (
               <div key={label} className="flex justify-between text-sm">
                 <span className="text-slate-500">{label}</span>

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 760">
+  <!-- Main circle -->
+  <circle cx="380" cy="390" r="340" fill="#1d2d4e"/>
+  <!-- Top-right arc cutout (partial circle segment gap) -->
+  <path d="M 570 110 A 340 340 0 0 1 710 330 L 680 340 A 310 310 0 0 0 558 136 Z" fill="white"/>
+
+  <!-- Upper arrow / bolt pointing right -->
+  <polygon points="
+    130,270
+    460,270
+    540,190
+    600,190
+    420,370
+    620,370
+    540,450
+    130,450
+    310,350
+    130,350
+  " fill="white"/>
+
+  <!-- Lower arrow / bolt pointing right -->
+  <polygon points="
+    160,470
+    490,470
+    570,390
+    630,390
+    450,570
+    650,570
+    570,650
+    160,650
+    340,550
+    160,550
+  " fill="white"/>
+</svg>

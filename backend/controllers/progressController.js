@@ -63,12 +63,18 @@ const updateModuleProgress = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Not enrolled in this training.' });
     }
 
-    // Add module if not already completed
-    const alreadyDone = progress.completedModules.find(
+    // Toggle module completion
+    const alreadyDoneIndex = progress.completedModules.findIndex(
       (m) => m.moduleIndex === parseInt(moduleIndex)
     );
 
-    if (!alreadyDone) {
+    const wasCompleted = progress.status === 'completed';
+
+    if (alreadyDoneIndex !== -1) {
+      // Remove it (Unmark)
+      progress.completedModules.splice(alreadyDoneIndex, 1);
+    } else {
+      // Add it (Mark done)
       progress.completedModules.push({ moduleIndex: parseInt(moduleIndex) });
     }
 
@@ -79,14 +85,25 @@ const updateModuleProgress = async (req, res) => {
     );
 
     // Update status
-    if (progress.percentageComplete === 0) {
-      progress.status = 'enrolled';
-    } else if (progress.percentageComplete === 100) {
-      progress.status = 'completed';
-      progress.completedAt = new Date();
-      await Training.findByIdAndUpdate(trainingId, { $inc: { completedCount: 1 } });
+    if (progress.percentageComplete === 100) {
+      if (!wasCompleted) {
+        progress.status = 'completed';
+        progress.completedAt = new Date();
+        await Training.findByIdAndUpdate(trainingId, { $inc: { completedCount: 1 } });
+      }
     } else {
-      progress.status = 'in_progress';
+      if (wasCompleted) {
+        // Was completed, now it's not
+        progress.status = 'in_progress';
+        progress.completedAt = null;
+        await Training.findByIdAndUpdate(trainingId, { $inc: { completedCount: -1 } });
+      }
+      
+      if (progress.percentageComplete === 0) {
+        progress.status = 'enrolled';
+      } else {
+        progress.status = 'in_progress';
+      }
     }
 
     await progress.save();
