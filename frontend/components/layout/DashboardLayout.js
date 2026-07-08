@@ -31,8 +31,8 @@ export default function DashboardLayout({ children, requiredRole }) {
     <div className="min-h-screen bg-slate-50">
       <Sidebar />
       <Topbar />
-      <main className="ml-64 pt-16 min-h-screen">
-        <div className="p-8">{children}</div>
+      <main className="ml-24 min-h-screen transition-all duration-300" style={{ paddingTop: 104 }}>
+        <div className="p-8 pt-0">{children}</div>
       </main>
     </div>
   );

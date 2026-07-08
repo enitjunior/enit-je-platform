@@ -29,8 +29,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['Outfit', 'sans-serif'],
-        display: ['Syne', 'sans-serif'],
+        sans: ['Montserrat', 'sans-serif'],
+        display: ['Montserrat', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       boxShadow: {

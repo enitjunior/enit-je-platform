@@ -1,30 +1,54 @@
-import clsx from 'clsx';
+import { useEffect, useState, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 
-export default function StatCard({ label, value, sub, icon, color = 'navy', trend }) {
-  const colors = {
-    navy:  { bg: 'bg-navy-900/8',  icon: 'text-navy-900',  ring: 'ring-navy-900/10' },
-    teal:  { bg: 'bg-teal-je/10',  icon: 'text-teal-dark', ring: 'ring-teal-je/20'  },
-    green: { bg: 'bg-green-50',    icon: 'text-green-600', ring: 'ring-green-100'   },
-    amber: { bg: 'bg-amber-50',    icon: 'text-amber-600', ring: 'ring-amber-100'   },
-    red:   { bg: 'bg-red-50',      icon: 'text-red-500',   ring: 'ring-red-100'     },
-  };
-  const c = colors[color] || colors.navy;
+function CountUp({ value = 0, duration = 1.2 }) {
+  const [display, setDisplay] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
 
+  useEffect(() => {
+    if (!isInView) return;
+    const target = Number(value) || 0;
+    if (target === 0) {
+      setDisplay(0);
+      return;
+    }
+
+    let startTime = null;
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
+      const eased = 1 - (1 - progress) * (1 - progress); // easeOutQuad
+      setDisplay(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [isInView, value, duration]);
+
+  return <span ref={ref}>{display}</span>;
+}
+
+export default function StatCard({ label, value, icon: Icon, color }) {
   return (
-    <div className="card flex items-start gap-4">
-      <div className={clsx('w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ring-1', c.bg, c.ring)}>
-        <span className={clsx('text-xl', c.icon)}>{icon}</span>
+    <motion.div
+      className="rounded-[2rem] p-6 w-48 h-48 flex flex-col items-center justify-between text-center"
+      style={{ background: '#27384e' }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+      whileHover={{ y: -2, backgroundColor: '#3ec0c7', transition: { duration: 0.18 } }}
+    >
+      <div className="flex flex-col items-center gap-2">
+        <Icon size={20} className="text-white flex-shrink-0" strokeWidth={1.75} />
+        <p className="text-xs font-bold uppercase tracking-wide text-white leading-tight text-center whitespace-pre-line">
+          {label}
+        </p>
       </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">{label}</p>
-        <p className="font-display font-bold text-2xl text-navy-900 leading-none">{value ?? '—'}</p>
-        {sub && <p className="text-xs text-slate-400 mt-1">{sub}</p>}
-        {trend !== undefined && (
-          <p className={clsx('text-xs font-medium mt-1', trend >= 0 ? 'text-green-600' : 'text-red-500')}>
-            {trend >= 0 ? '▲' : '▼'} {Math.abs(trend)}% vs last month
-          </p>
-        )}
-      </div>
-    </div>
+      <div className="flex-1 flex items-center justify-center">
+  <p className="font-display font-extrabold text-white leading-none mt-4" style={{ fontSize: '4.5rem' }}>
+    <CountUp value={value} />
+  </p>
+</div>
+    </motion.div>
   );
 }
