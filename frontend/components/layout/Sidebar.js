@@ -15,6 +15,7 @@ const ICONS = {
   trainings: 'M22 10v6M2 10l10-5 10 5-10 5z M6 12v5c3 3 9 3 12 0v-5',
   progress:  'M18 20V10 M12 20V4 M6 20v-6',
   proposals: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z',
+  agenda:    'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z',
   users:     'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2 M23 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75',
   logout:    'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-5-5-5 M21 12H9',
 };
@@ -22,6 +23,7 @@ const ICONS = {
 const adminLinks = [
   { href: '/admin/dashboard', label: 'Tableau de bord', icon: 'dashboard' },
   { href: '/admin/trainings', label: 'Formations',       icon: 'trainings' },
+  { href: '/admin/agenda',    label: 'Agenda',           icon: 'agenda' },
   { href: '/admin/proposals', label: 'Propositions',     icon: 'proposals' },
   { href: '/admin/users',     label: 'Membres',          icon: 'users' },
   { href: '/admin/progress',  label: 'Progression',      icon: 'progress' },

@@ -13,7 +13,7 @@ const trainingSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, 'Category is required'],
-      enum: ['Technical', 'Management', 'Design', 'Marketing', 'Finance', 'Soft Skills', 'Other'],
+  enum: ['Marketing', 'DevCo', 'Projet', 'Affaires Internationales', 'Qualité', 'IT', 'Toutes les cellules'],
     },
     level: {
       type: String,
@@ -26,6 +26,13 @@ const trainingSchema = new mongoose.Schema(
       min: 0,
     },
     instructor: { type: String, trim: true },
+    color: { type: String, default: '#28374d' },  
+    scheduledDate: {
+  type: Date,
+  default: null,
+},
+
+tags: [{ type: String, trim: true }],
     tags: [{ type: String, trim: true }],
     modules: [
       {

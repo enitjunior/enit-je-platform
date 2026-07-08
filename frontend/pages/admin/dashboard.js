@@ -14,6 +14,8 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 
 const MONTH_NAMES = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
 
+// TODO: remplacer les clés à gauche par les vraies clés renvoyées par ton backend
+// dans stats.enrollmentsByCategory (ex: si le backend renvoie "design", "finance"...)
 const CELL_LABELS = {
   Design: 'Marketing',
   Finance: 'DevCo',
@@ -87,70 +89,45 @@ export default function AdminDashboard() {
           />
         </div>
 
-        {/* Diagramme en anneau par catégorie */}
+        {/* Diagramme en anneau par cellule */}
         <div className="card">
           <h2 className="font-display font-bold text-navy-900 text-base mb-4">Inscriptions par cellule</h2>
           {categoryLabels.length > 0 ? (
-            <Doughnut
-              data={{
-                labels: categoryLabels,
-                datasets: [{
-                  data: categoryData,
-                  backgroundColor: ['#1d2d4e', '#3cbfbf', '#7c3aed', '#db2777', '#059669', '#d97706', '#6b7280'],
-                  borderWidth: 0,
-                }],
-              }}
-              options={{ plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } } } }}
-            />
+            <>
+              <div className="max-w-[280px] mx-auto mt-12">
+                <Doughnut
+                  data={{
+                    labels: categoryLabels,
+                    datasets: [{
+                      data: categoryData,
+                      // Dégradé basé sur la charte graphique : #28374d → #3ec0c7
+                      backgroundColor: ['#28374d', '#2f6475', '#37919e', '#3ec0c7'],
+                      borderWidth: 0,
+                    }],
+                  }}
+                  options={{
+                    plugins: { legend: { display: false } },
+                  }}
+                />
+              </div>
+              {/* Légende personnalisée : mt-8 contrôle la distance avec la roue */}
+              <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-12">
+                {categoryLabels.map((label, i) => (
+                  <div key={label} className="flex items-center gap-2">
+                    <span
+                      className="w-3 h-3 rounded-sm inline-block"
+                      style={{ backgroundColor: ['#28374d', '#2f6475', '#37919e', '#3ec0c7'][i] }}
+                    />
+                    <span className="text-sm text-slate-600">{label}</span>
+                  </div>
+                ))}
+              </div>
+            </>
           ) : (
             <div className="h-40 flex items-center justify-center text-slate-400 text-sm">Aucune donnée d'inscription pour l'instant</div>
           )}
         </div>
       </div>
-
-      {/* Graphique en barres : répartition par catégorie */}
-      <div className="card">
-        <h2 className="font-display font-bold text-navy-900 text-base mb-4">Répartition par cellule</h2>
-        <Bar
-          data={{
-            labels: categoryLabels.length ? categoryLabels : ['Aucune donnée'],
-            datasets: [{
-              label: 'Inscriptions',
-              data: categoryData.length ? categoryData : [0],
-              backgroundColor: '#1d2d4e',
-              borderRadius: 6,
-              hoverBackgroundColor: '#3cbfbf',
-            }],
-          }}
-          options={{
-            responsive: true, plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
-          }}
-        />
-      </div>
-
-      {/* Ligne de résumé */}
-      <div className="grid grid-cols-3 gap-5 mt-6">
-  {[
-    { label: 'Total des inscriptions', value: stats?.totalEnrollments,    icon: ClipboardList },
-    { label: 'En cours',                value: stats?.inProgressTrainings, icon: RefreshCw },
-    { label: 'Total des propositions', value: stats?.totalProposals,      icon: FileCheck },
-  ].map((s, i) => (
-    <motion.div
-      key={s.label}
-      className="card flex items-center gap-4"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: i * 0.08, duration: 0.4, ease: 'easeOut' }}
-    >
-      <s.icon size={20} className="text-slate-400" strokeWidth={1.75} />
-      <div>
-        <p className="text-xs text-slate-500 uppercase tracking-wide">{s.label}</p>
-        <p className="font-display font-bold text-xl text-navy-900">{s.value ?? 0}</p>
-      </div>
-    </motion.div>
-  ))}
-</div>
     </DashboardLayout>
   );
 }

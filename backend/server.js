@@ -11,6 +11,7 @@ const proposalRoutes = require('./routes/proposals');
 const progressRoutes = require('./routes/progress');
 const userRoutes = require('./routes/users');
 const statsRoutes = require('./routes/stats');
+const calendarMarkRoutes = require('./routes/calendarMarks');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/proposals', proposalRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/calendar-marks', calendarMarkRoutes);
 
 // ─── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
