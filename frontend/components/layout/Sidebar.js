@@ -30,10 +30,10 @@ const adminLinks = [
 ];
 
 const memberLinks = [
-  { href: '/member/dashboard', label: 'Dashboard', icon: 'dashboard' },
-  { href: '/member/trainings', label: 'Trainings', icon: 'trainings' },
-  { href: '/member/progress', label: 'My Progress', icon: 'progress' },
-  { href: '/member/proposals', label: 'Proposals', icon: 'proposals' },
+  { href: '/member/dashboard', label: 'Tableau de bord', icon: 'dashboard' },
+  { href: '/member/trainings', label: 'Formations', icon: 'trainings' },
+  { href: '/member/progress', label: 'Ma Progression', icon: 'progress' },
+  { href: '/member/proposals', label: 'Propositions', icon: 'proposals' },
 ];
 
 export default function Sidebar() {
@@ -48,10 +48,7 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="px-6 py-6 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #3cbfbf, #1d2d4e)' }}>
-            <span className="text-white font-display font-bold text-sm">JE</span>
-          </div>
+          <img src="/logo/Primary logo - White.png" alt="ENIT JE Logo" className="w-10 h-10 object-contain" />
           <div>
             <p className="text-white font-display font-bold text-sm leading-tight">ENIT</p>
             <p className="text-teal-je text-xs font-medium">Junior Entreprise</p>
@@ -60,25 +57,58 @@ export default function Sidebar() {
       </div>
 
       {/* User info */}
-      <div className="px-4 py-4 border-b border-white/10">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-teal-je/20 flex items-center justify-center flex-shrink-0">
-            <span className="text-teal-je font-semibold text-sm">
-              {user?.firstName?.[0]}{user?.lastName?.[0]}
-            </span>
+      <div className="px-3 py-3 border-b border-white/10">
+        {user?.role !== 'admin' ? (() => {
+          const isProfileActive = router.pathname === '/member/profile';
+          return (
+            <Link href="/member/profile"
+              className={clsx(
+                'sidebar-link',
+                isProfileActive && 'active'
+              )}>
+              <div className="w-7 h-7 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center bg-teal-je/20">
+                {user?.avatar ? (
+                  <img src={user.avatar} alt="avatar" className="w-full h-full object-cover rounded-full" />
+                ) : (
+                  <span className="text-teal-je font-semibold text-xs">
+                    {(user?.firstName?.[0] || '').toUpperCase()}{(user?.lastName?.[0] || '').toUpperCase()}
+                  </span>
+                )}
+              </div>
+              <div className="min-w-0">
+                <p className="text-white text-sm font-medium truncate leading-tight">
+                  {user?.firstName} {user?.lastName}
+                </p>
+                <span className="text-xs font-medium capitalize text-slate-400">
+                  {user?.role}
+                </span>
+              </div>
+              {isProfileActive && (
+                <div className="ml-auto w-1 h-4 rounded-full bg-teal-je" />
+              )}
+            </Link>
+          );
+        })() : (
+          <div className="flex items-center gap-3 px-4 py-2.5">
+            <div className="w-9 h-9 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center bg-teal-je/20">
+              {user?.avatar ? (
+                <img src={user.avatar} alt="avatar" className="w-full h-full object-cover rounded-full" />
+              ) : (
+                <span className="text-teal-je font-semibold text-sm">
+                  {(user?.firstName?.[0] || '').toUpperCase()}{(user?.lastName?.[0] || '').toUpperCase()}
+                </span>
+              )}
+            </div>
+            <div className="min-w-0">
+              <p className="text-white text-sm font-medium truncate">
+                {user?.firstName} {user?.lastName}
+              </p>
+              <span className="text-xs font-medium capitalize text-teal-je">
+                {user?.role}
+              </span>
+            </div>
           </div>
-          <div className="min-w-0">
-            <p className="text-white text-sm font-medium truncate">
-              {user?.firstName} {user?.lastName}
-            </p>
-            <span className={clsx(
-              'text-xs font-medium capitalize',
-              user?.role === 'admin' ? 'text-teal-je' : 'text-slate-400'
-            )}>
-              {user?.role}
-            </span>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Navigation */}

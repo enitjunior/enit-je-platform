@@ -46,11 +46,21 @@ export default function TrainingCard({ training, progress, href }) {
           {training.description}
         </p>
 
-        <div className="flex items-center gap-4 text-xs text-slate-500 mb-4">
-          <span>⏱ {training.duration}h</span>
-          <span>📦 {training.modules?.length || 0} modules</span>
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-400 mb-4">
+          <span>{training.duration}h</span>
+          <span>•</span>
+          <span>{training.modules?.length || 0} modules</span>
           {training.enrolledCount !== undefined && (
-            <span>👥 {training.enrolledCount} enrolled</span>
+            <>
+              <span>•</span>
+              <span>{training.enrolledCount} inscrits</span>
+            </>
+          )}
+          {training.instructor && (
+            <>
+              <span>•</span>
+              <span className="font-medium text-slate-500">{training.instructor}</span>
+            </>
           )}
         </div>
 

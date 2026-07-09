@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '../../lib/auth';
 
-const DEPARTMENTS = ['Engineering', 'Design', 'Marketing', 'Finance', 'Management', 'Other'];
+const DEPARTMENTS = ['IT', 'Engineering', 'Design', 'Marketing', 'Finance', 'Management', 'Other'];
 
 export default function RegisterPage() {
   const { register } = useAuth();
