@@ -17,11 +17,7 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (
-      err.response?.status === 401 &&
-      typeof window !== 'undefined' &&
-      !err.config.url.includes('/auth/login')
-    ) {
+    if (err.response?.status === 401 && typeof window !== 'undefined') {
       Cookies.remove('token');
       Cookies.remove('user');
       window.location.href = '/auth/login';

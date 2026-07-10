@@ -10,24 +10,14 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Hydrate user on mount
+  // Hydrate user from cookie on mount
   useEffect(() => {
+    const stored = Cookies.get('user');
     const token = Cookies.get('token');
-    if (!token) {
-      setLoading(false);
-      return;
+    if (stored && token) {
+      try { setUser(JSON.parse(stored)); } catch (_) {}
     }
-
-    api.get('/auth/me')
-      .then(({ data }) => {
-        setUser(data.user);
-      })
-      .catch(() => {
-        logout();
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    setLoading(false);
   }, []);
 
   const login = async (email, password) => {
@@ -41,6 +31,7 @@ export function AuthProvider({ children }) {
   const register = async (payload) => {
     const { data } = await api.post('/auth/register', payload);
     Cookies.set('token', data.token, { expires: 7 });
+    Cookies.set('user', JSON.stringify(data.user), { expires: 7 });
     setUser(data.user);
     return data.user;
   };
@@ -55,6 +46,7 @@ export function AuthProvider({ children }) {
   const refreshUser = async () => {
     const { data } = await api.get('/auth/me');
     setUser(data.user);
+    Cookies.set('user', JSON.stringify(data.user), { expires: 7 });
   };
 
   return (

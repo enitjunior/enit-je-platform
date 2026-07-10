@@ -28,17 +28,17 @@ async function seed() {
   const admin = await User.create({
     firstName: 'Admin',
     lastName: 'ENIT JE',
-    email: 'admin@enitje.tn',
-    password: 'admin123',
+    email: 'admin@enit-je.tn',
+    password: 'Admin@123',
     role: 'admin',
     department: 'RH',
   });
 
   // Create members
   const members = await User.create([
-    { firstName: 'Amine', lastName: 'Trabelsi', email: 'amine@enitje.tn', password: 'member123', role: 'member', department: 'IT' },
-    { firstName: 'Sarra', lastName: 'Ben Ali', email: 'sarra@enitje.tn', password: 'member123', role: 'member', department: 'Marketing' },
-    { firstName: 'Mohamed', lastName: 'Chaabane', email: 'mohamed@enitje.tn', password: 'member123', role: 'member', department: 'Finance' },
+    { firstName: 'Anis', lastName: 'Trabelsi', email: 'anis@enit-je.tn', password: 'Member@123', role: 'member', department: 'IT' },
+    { firstName: 'Sarra', lastName: 'Ben Ali', email: 'sarra@enit-je.tn', password: 'Member@123', role: 'member', department: 'Marketing' },
+    { firstName: 'Mohamed', lastName: 'Chaabane', email: 'mohamed@enit-je.tn', password: 'Member@123', role: 'member', department: 'Finance' },
   ]);
   console.log('Created users');
 

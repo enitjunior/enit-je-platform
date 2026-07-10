@@ -32,7 +32,10 @@ export default function LoginPage() {
           style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
 
         <div className="flex items-center gap-3 relative z-10">
-          <img src="/logo/Primary logo - White.png" alt="ENIT JE Logo" className="w-10 h-10 object-contain" />
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+            style={{ background: 'linear-gradient(135deg, #3cbfbf, #2a9090)' }}>
+            <span className="text-white font-display font-bold">JE</span>
+          </div>
           <div>
             <p className="text-white font-display font-bold text-lg leading-none">ENIT</p>
             <p className="text-teal-je text-xs font-medium">Junior Entreprise</p>
@@ -66,7 +69,10 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-3 mb-10">
-            <img src="/logo/Primary logo - Colored.png" alt="ENIT JE Logo" className="w-9 h-9 object-contain" />
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+              style={{ background: 'linear-gradient(135deg, #1d2d4e, #3cbfbf)' }}>
+              <span className="text-white font-display font-bold text-sm">JE</span>
+            </div>
             <span className="font-display font-bold text-navy-900 text-lg">ENIT Junior Entreprise</span>
           </div>
 
@@ -123,8 +129,8 @@ export default function LoginPage() {
           {/* Demo credentials hint */}
           <div className="mt-8 p-4 rounded-xl bg-slate-50 border border-slate-100">
             <p className="text-xs font-semibold text-slate-500 mb-2">Demo credentials</p>
-            <p className="text-xs text-slate-400">Admin: <span className="font-mono text-navy-900">admin@enitje.tn</span> / <span className="font-mono text-navy-900">admin123</span></p>
-            <p className="text-xs text-slate-400 mt-1">Member: <span className="font-mono text-navy-900">amine@enitje.tn</span> / <span className="font-mono text-navy-900">member123</span></p>
+            <p className="text-xs text-slate-400">Admin: <span className="font-mono text-navy-900">admin@enit-je.tn</span> / <span className="font-mono text-navy-900">Admin@123</span></p>
+            <p className="text-xs text-slate-400 mt-1">Member: <span className="font-mono text-navy-900">anis@enit-je.tn</span> / <span className="font-mono text-navy-900">Member@123</span></p>
           </div>
         </div>
       </div>

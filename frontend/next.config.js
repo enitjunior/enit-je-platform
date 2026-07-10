@@ -4,6 +4,11 @@ const nextConfig = {
   images: {
     domains: ['ui-avatars.com'],
   },
+  api: {
+    bodyParser: {
+      sizeLimit: '500mb',
+    },
+  },
 };
 
 module.exports = nextConfig;

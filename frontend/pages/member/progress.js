@@ -6,16 +6,9 @@ import api from '../../lib/api';
 const STATUS_FILTERS = ['all', 'enrolled', 'in_progress', 'completed'];
 
 const STATUS_META = {
-  enrolled:    { label: 'Inscrit',     icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mr-1 inline-block"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>, badge: 'badge-yellow' },
-  in_progress: { label: 'En cours',    icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mr-1 inline-block"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>, badge: 'badge-teal'   },
-  completed:   { label: 'Terminé',     icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mr-1 inline-block"><polyline points="20 6 9 17 4 12"/></svg>, badge: 'badge-green'  },
-};
-
-const FILTER_LABELS = {
-  all: 'Toutes',
-  enrolled: 'Inscrit',
-  in_progress: 'En cours',
-  completed: 'Terminé',
+  enrolled:    { label: 'Enrolled',     icon: '📋', badge: 'badge-yellow' },
+  in_progress: { label: 'In Progress',  icon: '🔄', badge: 'badge-teal'   },
+  completed:   { label: 'Completed',    icon: '✅', badge: 'badge-green'  },
 };
 
 const CATEGORY_COLORS = {
@@ -55,21 +48,21 @@ export default function MemberProgress() {
   return (
     <DashboardLayout requiredRole="member">
       <div className="mb-6">
-        <h2 className="font-display font-bold text-2xl text-navy-900">Ma progression</h2>
-        <p className="text-slate-500 text-sm mt-0.5">Suivez toutes vos formations</p>
+        <h2 className="font-display font-bold text-2xl text-navy-900">My Progress</h2>
+        <p className="text-slate-500 text-sm mt-0.5">Track all your enrolled trainings</p>
       </div>
 
       {/* Summary strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-7">
         {[
-          { label: 'Candidatures', value: counts.all,         icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20M4 19.5V3A2.5 2.5 0 0 1 6.5 0.5H20v16.5H6.5a2.5 2.5 0 0 0-2.5 2.5z"/></svg>, color: 'bg-navy-900/8 text-navy-900' },
-          { label: 'Terminé',      value: counts.completed,   icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>, color: 'bg-green-50 text-green-700' },
-          { label: 'En cours',    value: counts.in_progress, icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>, color: 'bg-teal-je/10 text-teal-dark' },
-          { label: 'Heures acquises',   value: `${totalHours}h`,   icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>, color: 'bg-amber-50 text-amber-700' },
+          { label: 'Total Enrolled', value: counts.all,         icon: '📚', color: 'bg-navy-900/8 text-navy-900' },
+          { label: 'Completed',      value: counts.completed,   icon: '🎓', color: 'bg-green-50 text-green-700' },
+          { label: 'In Progress',    value: counts.in_progress, icon: '🔄', color: 'bg-teal-je/10 text-teal-dark' },
+          { label: 'Hours Earned',   value: `${totalHours}h`,   icon: '⏱', color: 'bg-amber-50 text-amber-700' },
         ].map(({ label, value, icon, color }) => (
           <div key={label} className="card flex items-center gap-3 py-4">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${color}`}>
-              {icon}
+              <span className="text-lg">{icon}</span>
             </div>
             <div>
               <p className="font-display font-bold text-xl text-navy-900 leading-none">{value}</p>
@@ -91,7 +84,7 @@ export default function MemberProgress() {
                 : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
             }`}
           >
-            {FILTER_LABELS[f]}
+            {f.replace('_', ' ')}
             {counts[f] > 0 && (
               <span className="ml-1.5 opacity-60">({counts[f]})</span>
             )}
@@ -105,15 +98,13 @@ export default function MemberProgress() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="card text-center py-16">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-3 text-slate-300"><path d="M22 12h-6l-2 3h-4l-2-3H2"/></svg>
+          <span className="text-4xl block mb-3">📭</span>
           <p className="text-slate-400 mb-4">
-            {filter === 'all' 
-              ? "Vous n'êtes inscrit à aucune formation." 
-              : `Aucune formation ${FILTER_LABELS[filter].toLowerCase()}.`}
+            {filter === 'all' ? "You haven't enrolled in any trainings yet." : `No ${filter.replace('_', ' ')} trainings.`}
           </p>
           {filter === 'all' && (
             <Link href="/member/trainings" className="btn-teal inline-block">
-              Parcourir les formations
+              Browse Trainings
             </Link>
           )}
         </div>
@@ -144,13 +135,18 @@ export default function MemberProgress() {
                   </div>
 
                   <div className="flex flex-wrap gap-4 text-xs text-slate-500 mb-3">
-                    <span>{p.training?.category}</span>
-                    <span>{p.training?.duration}h</span>
-                    <span>{p.training?.level}</span>
-                    <span>Inscrit le {new Date(p.enrolledAt).toLocaleDateString('fr-FR')}</span>
+                    <span
+                      className="font-medium px-2 py-0.5 rounded-md text-white"
+                      style={{ background: catColor, opacity: 0.85 }}
+                    >
+                      {p.training?.category}
+                    </span>
+                    <span>⏱ {p.training?.duration}h</span>
+                    <span>🎯 {p.training?.level}</span>
+                    <span>Enrolled {new Date(p.enrolledAt).toLocaleDateString()}</span>
                     {p.completedAt && (
                       <span className="text-green-600">
-                        Terminé le {new Date(p.completedAt).toLocaleDateString('fr-FR')}
+                        ✅ Completed {new Date(p.completedAt).toLocaleDateString()}
                       </span>
                     )}
                   </div>
@@ -179,7 +175,7 @@ export default function MemberProgress() {
                         : 'bg-navy-900 text-white hover:bg-navy-700'
                     }`}
                   >
-                    {p.status === 'completed' ? 'Revoir' : 'Continuer →'}
+                    {p.status === 'completed' ? 'Review' : 'Continue →'}
                   </Link>
                 </div>
               </div>
