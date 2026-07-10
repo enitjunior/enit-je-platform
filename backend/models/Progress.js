@@ -48,7 +48,6 @@ const progressSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Compound unique index: one progress doc per user per training
 progressSchema.index({ user: 1, training: 1 }, { unique: true });
 
 module.exports = mongoose.model('Progress', progressSchema);
